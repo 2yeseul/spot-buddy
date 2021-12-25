@@ -1,4 +1,6 @@
 package kr.co.spotbuddy.interfaces.response
 
-class SignUpResponse {
-}
+data class SignUpResponse(
+    val token: String,
+    val email: String,
+)
