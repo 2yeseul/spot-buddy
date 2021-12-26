@@ -1,6 +1,6 @@
 package kr.co.spotbuddy.application
 
-import kr.co.spotbuddy.domain.MemberSignUpEvent
+import kr.co.spotbuddy.domain.SendEmailEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import org.thymeleaf.TemplateEngine
@@ -13,7 +13,7 @@ class DomainEventListener(
     private val templateEngine: TemplateEngine,
 ) {
     @EventListener
-    fun handle(event: MemberSignUpEvent) {
+    fun handle(event: SendEmailEvent) {
         val token = event.member.emailCheckToken
         val email = event.member.email
 
