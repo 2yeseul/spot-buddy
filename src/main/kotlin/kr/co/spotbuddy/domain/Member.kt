@@ -18,7 +18,7 @@ class Member(
 
     val email: String,
     var isEmailVerified: Boolean,
-    val emailCheckToken: String,
+    var emailCheckToken: String,
     val emailCheckTokenGeneratedAt: LocalDateTime?,
     var nickname: String,
     val name: String,
@@ -41,6 +41,14 @@ class Member(
     }
 
     fun verifyEmail() {
+        this.isEmailVerified = true
+    }
+
+    fun updateEmailCheckToken(token: String) {
+        this.emailCheckToken = token
+    }
+
+    fun verifyAccount() {
         this.isEmailVerified = true
     }
 
