@@ -45,15 +45,14 @@ class Member(
     }
 
     companion object {
-        fun from(signUpForm: SignUpForm): Member {
+        fun from(signUpForm: SignUpForm, encodedPassword: String): Member {
             return Member(
                 id = null,
                 email = signUpForm.email,
                 nickname = signUpForm.nickname,
                 name = signUpForm.name,
                 birth = signUpForm.birth,
-                // FIXME : password encoder apply
-                password = signUpForm.password,
+                password = encodedPassword,
                 teamIndex = signUpForm.teamIndex,
                 gender = signUpForm.gender,
                 weather = 50,
