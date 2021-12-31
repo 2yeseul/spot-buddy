@@ -1,6 +1,6 @@
 package kr.co.spotbuddy.domain
 
-import kr.co.spotbuddy.interfaces.request.SignUpForm
+import kr.co.spotbuddy.interfaces.request.MemberRequest
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import java.util.*
@@ -53,18 +53,18 @@ class Member(
     }
 
     companion object {
-        fun from(signUpForm: SignUpForm, encodedPassword: String): Member {
+        fun from(memberRequest: MemberRequest, encodedPassword: String): Member {
             return Member(
                 id = null,
-                email = signUpForm.email,
-                nickname = signUpForm.nickname,
-                name = signUpForm.name,
-                birth = signUpForm.birth,
+                email = memberRequest.email,
+                nickname = memberRequest.nickname,
+                name = memberRequest.name,
+                birth = memberRequest.birth,
                 password = encodedPassword,
-                teamIndex = signUpForm.teamIndex,
-                gender = signUpForm.gender,
+                teamIndex = memberRequest.teamIndex,
+                gender = memberRequest.gender,
                 weather = 50,
-                isAgreeOnGetPromotion = signUpForm.isAgreeOnGetPromotion,
+                isAgreeOnGetPromotion = memberRequest.isAgreeOnGetPromotion,
                 emailCheckToken = UUID.randomUUID().toString(),
                 emailCheckTokenGeneratedAt = LocalDateTime.now(),
                 isAgeOlderThan14 = true,
