@@ -1,6 +1,6 @@
 package kr.co.spotbuddy.interfaces.request
 
-data class SignUpForm(
+data class MemberRequest(
     val email: String,
     val nickname: String,
     val name: String,

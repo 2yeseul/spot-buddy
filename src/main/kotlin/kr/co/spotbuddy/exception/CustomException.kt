@@ -17,4 +17,6 @@ enum class ExceptionDefinition(
     DELETE_ACCOUNT_WITHIN_10DAYS("10일 이내에 탈퇴한 계정입니다.", HttpStatus.NOT_ACCEPTABLE),
     NOT_FOUND_USER("존재하지 않는 사용자 입니다.", HttpStatus.NOT_FOUND),
     INVALID_EMAIL_TOKEN("유효하지 않은 이메일 토큰 입니다.", HttpStatus.FORBIDDEN),
+    NOT_FOUND_TOUR("존재하지 않는 동행입니다.", HttpStatus.NOT_FOUND),
+    BAD_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
 }

@@ -8,7 +8,7 @@ import kr.co.spotbuddy.domain.MemberRepository
 import kr.co.spotbuddy.domain.SendEmailEvent
 import kr.co.spotbuddy.exception.CustomException
 import kr.co.spotbuddy.exception.ExceptionDefinition
-import kr.co.spotbuddy.interfaces.request.SignUpForm
+import kr.co.spotbuddy.interfaces.request.MemberRequest
 import kr.co.spotbuddy.util.BadWordsUtil
 import lombok.extern.slf4j.Slf4j
 import org.springframework.context.ApplicationEventPublisher
@@ -28,8 +28,8 @@ class MemberService(
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
-    fun signUp(signUpForm: SignUpForm): Member {
-        val member = memberRepository.save(Member.from(signUpForm, passwordEncoder.encode(signUpForm.password)))
+    fun signUp(memberRequest: MemberRequest): Member {
+        val member = memberRepository.save(Member.from(memberRequest, passwordEncoder.encode(memberRequest.password)))
 
         CoroutineScope(Dispatchers.IO).launch {
             applicationEventPublisher.publishEvent(SendEmailEvent.fire(member))
