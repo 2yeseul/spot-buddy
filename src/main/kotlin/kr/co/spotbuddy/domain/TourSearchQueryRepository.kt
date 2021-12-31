@@ -38,4 +38,18 @@ class TourSearchQueryRepository(
             .fetch()
     }
 
+    fun searchByDate(startDate: LocalDate, endDate: LocalDate): List<Tour> {
+        if (startDate == endDate) {
+            return jpaQueryFactory.selectFrom(tour)
+                .where(tour.startDate.loe(startDate).and(tour.endDate.goe(endDate)))
+                .orderBy(tour.id.desc())
+                .fetch()
+        }
+
+        return jpaQueryFactory.selectFrom(tour)
+            .where(tour.startDate.goe(startDate).and(tour.endDate.loe(endDate)))
+            .orderBy(tour.id.desc())
+            .fetch()
+    }
+
 }

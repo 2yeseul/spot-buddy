@@ -1,6 +1,7 @@
 package kr.co.spotbuddy.domain
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import kr.co.spotbuddy.interfaces.request.TourRequest
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -47,4 +48,19 @@ class Tour(
 
     var isTempSaved: Boolean,
 ) {
+    fun update(tourRequest: TourRequest) {
+        this.tourLocation = tourRequest.tourLocation
+        this.tourTeam = tourRequest.tourTeam
+        this.tourTitle = tourRequest.tourTitle
+        this.tourContent = tourRequest.tourContent
+        this.requiredGender = tourRequest.requiredGender
+        this.minimumAge = tourRequest.minimumAge
+        this.maximumAge = tourRequest.maximumAge
+        this.tourDateDetail = tourRequest.tourDateDetail
+        this.bio = tourRequest.bio
+        this.startDate = tourRequest.tourStartDate
+        this.endDate = tourRequest.tourEndDate
+        this.isTempSaved = tourRequest.isTempSaved
+        this.isEnded = tourRequest.isEnded
+    }
 }

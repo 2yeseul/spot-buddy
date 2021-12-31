@@ -1,7 +1,7 @@
 package kr.co.spotbuddy.interfaces
 
 import kr.co.spotbuddy.application.MemberService
-import kr.co.spotbuddy.interfaces.request.SignUpForm
+import kr.co.spotbuddy.interfaces.request.MemberRequest
 import kr.co.spotbuddy.interfaces.response.SignUpView
 import lombok.extern.slf4j.Slf4j
 import org.springframework.http.ResponseEntity
@@ -15,8 +15,8 @@ class MemberController(
 ) {
 
     @PostMapping("/")
-    fun register(@RequestBody signUpForm: SignUpForm): ResponseEntity<SignUpView> {
-        val member = memberService.signUp(signUpForm)
+    fun register(@RequestBody memberRequest: MemberRequest): ResponseEntity<SignUpView> {
+        val member = memberService.signUp(memberRequest)
 
         return ResponseEntity
             .accepted()
