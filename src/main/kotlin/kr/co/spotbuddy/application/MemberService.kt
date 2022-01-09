@@ -12,6 +12,7 @@ import kr.co.spotbuddy.interfaces.request.MemberRequest
 import kr.co.spotbuddy.util.BadWordsUtil
 import lombok.extern.slf4j.Slf4j
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -38,6 +39,9 @@ class MemberService(
         return member
     }
 
+    fun getById(id: Long): Member {
+        return memberRepository.findByIdOrNull(id) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_USER)
+    }
     fun getByEmail(email: String): Member {
         return memberRepository.findByEmail(email) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_USER)
     }
