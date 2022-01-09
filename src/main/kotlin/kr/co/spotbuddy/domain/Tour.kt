@@ -35,7 +35,6 @@ class Tour(
 
     val createdAt: LocalDateTime,
 
-    var totalMember: Int,
     var nowMember: Int,
     var minimumMember: Int,
     var maximumMember: Int,
@@ -62,5 +61,32 @@ class Tour(
         this.endDate = tourRequest.tourEndDate
         this.isTempSaved = tourRequest.isTempSaved
         this.isEnded = tourRequest.isEnded
+    }
+
+    companion object {
+        fun of(tourRequest: TourRequest, member: Member): Tour {
+            return Tour(
+                id = tourRequest.id,
+                member = member,
+                tourLocation =  tourRequest.tourLocation,
+                tourTeam = tourRequest.tourTeam,
+                startDate = tourRequest.tourStartDate,
+                endDate = tourRequest.tourEndDate,
+                tourTitle = tourRequest.tourTitle,
+                tourContent = tourRequest.tourContent,
+                requiredGender = tourRequest.requiredGender,
+                minimumAge = tourRequest.minimumAge,
+                maximumAge = tourRequest.maximumAge,
+                createdAt = LocalDateTime.now(),
+                nowMember = 0,
+                viewCount = 0,
+                tourDateDetail = tourRequest.tourDateDetail,
+                bio = tourRequest.bio,
+                minimumMember = tourRequest.minimumMember,
+                maximumMember = tourRequest.maximumMember,
+                isTempSaved = tourRequest.isTempSaved,
+                isEnded = false,
+            )
+        }
     }
 }

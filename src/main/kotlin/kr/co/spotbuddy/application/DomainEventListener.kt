@@ -2,8 +2,10 @@ package kr.co.spotbuddy.application
 
 import kr.co.spotbuddy.domain.SendEmailEvent
 import kr.co.spotbuddy.domain.TourLookUpEvent
+import kr.co.spotbuddy.domain.TourThemeEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
+import org.springframework.transaction.event.TransactionalEventListener
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
 
@@ -12,6 +14,7 @@ class DomainEventListener(
     private val memberService: MemberService,
     private val emailService: EmailService,
     private val templateEngine: TemplateEngine,
+    private val tourThemeService: TourThemeService,
 ) {
     @EventListener
     fun handle(event: SendEmailEvent) {
@@ -34,5 +37,10 @@ class DomainEventListener(
         tour.apply {
             this.viewCount += 1
         }
+    }
+
+    @TransactionalEventListener
+    fun handle(event: TourThemeEvent) {
+        tourThemeService.saveTourThemes(event.themes, event.tourId)
     }
 }
