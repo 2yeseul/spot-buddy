@@ -14,11 +14,13 @@ data class TourRequest(
     val maximumAge: Int,
     val tourDateDetail: String,
     val bio: String,
-    val tourThemes: List<String>,
+    val tourThemes: List<String>?,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     val tourStartDate: LocalDate,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     val tourEndDate: LocalDate,
     val isTempSaved: Boolean,
     val isEnded: Boolean,
+    val minimumMember: Int,
+    val maximumMember: Int,
 )
