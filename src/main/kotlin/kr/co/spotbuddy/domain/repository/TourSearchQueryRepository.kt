@@ -1,7 +1,8 @@
-package kr.co.spotbuddy.domain
+package kr.co.spotbuddy.domain.repository
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import kr.co.spotbuddy.domain.QTour.tour
+import kr.co.spotbuddy.domain.Tour
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 

@@ -1,5 +1,7 @@
-package kr.co.spotbuddy.domain
+package kr.co.spotbuddy.domain.repository
 
+import kr.co.spotbuddy.domain.Member
+import kr.co.spotbuddy.domain.Tour
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface TourRepository: JpaRepository<Tour, Long> {
