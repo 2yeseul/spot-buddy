@@ -1,5 +1,6 @@
-package kr.co.spotbuddy.domain
+package kr.co.spotbuddy.domain.repository
 
+import kr.co.spotbuddy.domain.Member
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface MemberRepository: JpaRepository<Member, Long> {

@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.co.spotbuddy.domain.*
+import kr.co.spotbuddy.domain.repository.TourRepository
 import kr.co.spotbuddy.exception.CustomException
 import kr.co.spotbuddy.exception.ExceptionDefinition
 import kr.co.spotbuddy.interfaces.request.TourRequest
@@ -58,7 +59,8 @@ class TourService(
         tour.apply {
             this.update(tourRequest)
         }
-        // TODO : tourThemes 업데이트 처리
+
+        tourRequest.tourThemes?.let { tourThemeService.modifyThemes(it, tour.id!!) }
     }
 
     @Transactional
@@ -77,5 +79,9 @@ class TourService(
             ?.let { theme -> tourThemeService.saveTourThemes(theme, tour.id!!).map { it.theme } }
 
         return Pair(tour, themes)
+    }
+
+    fun getFilteredTours() {
+
     }
 }

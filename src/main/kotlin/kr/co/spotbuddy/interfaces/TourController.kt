@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/tour")
+@RequestMapping("/tours")
 class TourController(
     private val tourService: TourService
 ) {
@@ -37,5 +37,10 @@ class TourController(
         return ResponseEntity
             .ok()
             .body(TourView.of(tour, null))
+    }
+
+    @GetMapping("/")
+    fun getTours(@RequestParam isFiltered: Boolean, @RequestParam memberId: Long, @RequestParam page: Int) {
+
     }
 }

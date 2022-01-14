@@ -1,11 +1,8 @@
 package kr.co.spotbuddy.application
 
-import kr.co.spotbuddy.domain.DeleteAccountRepository
-import kr.co.spotbuddy.exception.CustomException
-import kr.co.spotbuddy.exception.ExceptionDefinition
+import kr.co.spotbuddy.domain.repository.DeleteAccountRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Period
 
 @Service
