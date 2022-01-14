@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.co.spotbuddy.domain.Member
-import kr.co.spotbuddy.domain.MemberRepository
+import kr.co.spotbuddy.domain.repository.MemberRepository
 import kr.co.spotbuddy.domain.SendEmailEvent
 import kr.co.spotbuddy.exception.CustomException
 import kr.co.spotbuddy.exception.ExceptionDefinition
@@ -44,6 +44,9 @@ class MemberService(
     }
     fun getByEmail(email: String): Member {
         return memberRepository.findByEmail(email) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_USER)
+    }
+    fun getByNickname(nickname: String): Member {
+        return memberRepository.findByNickname(nickname) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_USER)
     }
 
     @Transactional
