@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class BlockService(
     private val blockRepository: BlockRepository,
-    private val tourService: TourService,
     private val memberService: MemberService,
 ) {
     infix fun Long.isAlreadyBlockedBy(blockExecutor: Long): Boolean {
