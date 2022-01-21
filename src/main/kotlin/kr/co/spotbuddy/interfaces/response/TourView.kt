@@ -60,14 +60,14 @@ data class TourView (
                 minimumAge = tour.minimumAge,
                 maximumAge = tour.maximumAge,
                 nowNumberOfMember = tour.nowMember,
-                viewCount = 0,
+                viewCount = tour.viewCount,
                 tourDateDetail = tour.tourDateDetail,
                 bio = tour.bio,
                 minimumMember = tour.minimumMember,
                 maximumMember = tour.maximumMember,
                 isTempSaved = tour.isTempSaved,
                 isEnded = false,
-                scrapCount = null, // FIXME: scrap 구현 뒤 채우기
+                scrapCount = tour.scrapCount, // FIXME: scrap 구현 뒤 채우기
             )
         }
     }

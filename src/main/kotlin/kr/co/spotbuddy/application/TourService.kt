@@ -4,11 +4,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kr.co.spotbuddy.domain.*
+import kr.co.spotbuddy.domain.repository.TourQueryRepository
 import kr.co.spotbuddy.domain.repository.TourRepository
 import kr.co.spotbuddy.exception.CustomException
 import kr.co.spotbuddy.exception.ExceptionDefinition
 import kr.co.spotbuddy.interfaces.request.TourRequest
+import kr.co.spotbuddy.interfaces.request.TourSortType
 import org.springframework.context.ApplicationEventPublisher
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,6 +22,8 @@ class TourService(
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val memberService: MemberService,
     private val tourThemeService: TourThemeService,
+    private val blockService: BlockService,
+    private val tourQueryRepository: TourQueryRepository,
 ) {
     fun getTourById(id: Long): Tour {
         return tourRepository.findByIdOrNull(id) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_TOUR)
@@ -81,7 +86,23 @@ class TourService(
         return Pair(tour, themes)
     }
 
-    fun getFilteredTours() {
+    fun getFilteredTours(memberId: Long, pageable: Pageable, sortType: TourSortType): List<Tour> {
+        val getBlockedMemberIds = blockService.getMemberBlocks(memberId).map(BlockResponse::getBlocked)
+        if (getBlockedMemberIds.size > 1) {
+            when (sortType) {
+                TourSortType.LATEST -> tourQueryRepository.getFilteredLatestTours(getBlockedMemberIds, pageable)
+                TourSortType.SCRAPS -> tourQueryRepository.getFilteredPopularList(getBlockedMemberIds, pageable)
+            }
+        }
+        return listOf()
+    }
 
+    private fun getFilteredLatestTours(memberId: Long, pageable: Pageable): List<Tour> {
+        val getBlockedMemberIds = blockService.getMemberBlocks(memberId).map(BlockResponse::getBlocked)
+
+        if (getBlockedMemberIds.size > 1) {
+            return tourQueryRepository.getFilteredLatestTours(getBlockedMemberIds, pageable)
+        }
+        return listOf()
     }
 }

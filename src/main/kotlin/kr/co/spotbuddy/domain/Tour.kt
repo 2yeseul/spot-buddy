@@ -40,6 +40,7 @@ class Tour(
     var maximumMember: Int,
 
     var viewCount: Int,
+    var scrapCount: Int,
     var isEnded: Boolean,
 
     var tourDateDetail: String,
@@ -86,6 +87,7 @@ class Tour(
                 maximumMember = tourRequest.maximumMember,
                 isTempSaved = tourRequest.isTempSaved,
                 isEnded = false,
+                scrapCount = 0,
             )
         }
     }
