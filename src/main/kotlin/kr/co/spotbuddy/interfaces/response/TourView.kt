@@ -43,7 +43,7 @@ data class TourView (
         fun of(tour: Tour, tourThemes: List<String>?): TourView {
             return TourView(
                 id = tour.id,
-                age = (LocalDate.now().dayOfYear) - Integer.parseInt(tour.member.birth) + 1,
+                age = tour.member.getMemberAge(),
                 gender = tour.member.gender,
                 nickname = tour.member.nickname,
                 weather = tour.member.weather,
@@ -67,7 +67,7 @@ data class TourView (
                 maximumMember = tour.maximumMember,
                 isTempSaved = tour.isTempSaved,
                 isEnded = false,
-                scrapCount = tour.scrapCount, // FIXME: scrap 구현 뒤 채우기
+                scrapCount = tour.scrapCount,
             )
         }
     }

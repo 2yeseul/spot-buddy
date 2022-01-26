@@ -2,6 +2,7 @@ package kr.co.spotbuddy.domain
 
 import kr.co.spotbuddy.interfaces.request.MemberRequest
 import org.hibernate.annotations.DynamicUpdate
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.Entity
@@ -50,6 +51,10 @@ class Member(
 
     fun verifyAccount() {
         this.isEmailVerified = true
+    }
+
+    fun getMemberAge(): Int {
+        return (LocalDate.now().dayOfYear) - Integer.parseInt(this.birth) + 1
     }
 
     companion object {
