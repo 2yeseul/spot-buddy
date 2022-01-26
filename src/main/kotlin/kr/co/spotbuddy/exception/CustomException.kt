@@ -19,5 +19,5 @@ enum class ExceptionDefinition(
     INVALID_EMAIL_TOKEN("유효하지 않은 이메일 토큰 입니다.", HttpStatus.FORBIDDEN),
     NOT_FOUND_TOUR("존재하지 않는 동행입니다.", HttpStatus.NOT_FOUND),
     BAD_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
-    UNAUTHORIZED("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED)
+    UNAUTHORIZED("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED),
 }
