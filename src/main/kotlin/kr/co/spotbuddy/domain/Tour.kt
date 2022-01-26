@@ -64,6 +64,10 @@ class Tour(
         this.isEnded = tourRequest.isEnded
     }
 
+    fun close() {
+        this.isEnded = true
+    }
+
     companion object {
         fun of(tourRequest: TourRequest, member: Member): Tour {
             return Tour(

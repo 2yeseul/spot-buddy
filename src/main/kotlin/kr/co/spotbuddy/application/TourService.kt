@@ -25,17 +25,16 @@ class TourService(
     private val blockService: BlockService,
     private val tourQueryRepository: TourQueryRepository,
 ) {
-    fun getTourById(id: Long): Tour {
-        return tourRepository.findByIdOrNull(id) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_TOUR)
-    }
+    fun getTourById(id: Long): Tour =
+        tourRepository.findByIdOrNull(id) ?: throw CustomException(ExceptionDefinition.NOT_FOUND_TOUR)
 
-    fun isTempSavedAndMemberId(isTempSaved: Boolean, member: Member): Boolean {
+    fun isTempSavedAndMemberId(isTempSaved: Boolean, memberId: Long): Boolean {
+        val member = memberService.getById(memberId)
         return tourRepository.existsByIsTempSavedAndMember(isTempSaved, member)
     }
 
-    fun getLatestTempTour(member: Member): Tour {
-        return tourRepository.findFirstByIsTempSavedAndMemberOrderByIdDesc(true, member)
-    }
+    fun getLatestTempTour(member: Member): Tour =
+        tourRepository.findFirstByIsTempSavedAndMemberOrderByIdDesc(true, member)
 
     fun getTourDetail(id: Long) {
         val tour = getTourById(id)
@@ -45,9 +44,8 @@ class TourService(
         }
     }
 
-    fun getUsersTemporarySavedTours(member: Member): List<Tour> {
-        return tourRepository.findAllByIsTempSavedAndMember(true, member)
-    }
+    fun getUsersTemporarySavedTours(member: Member): List<Tour> =
+        tourRepository.findAllByIsTempSavedAndMember(true, member)
 
     @Transactional
     fun deleteAllTemporarySavedTours(memberId: Long) {
@@ -58,7 +56,20 @@ class TourService(
     }
 
     @Transactional
-    fun modifyTour(tourRequest: TourRequest, member: Member) {
+    fun deleteById(memberId: Long, tourId: Long) {
+        val tour = getTourById(tourId)
+
+        tour.member.id.let {
+            if (tour.member.id != memberId) {
+                throw CustomException(ExceptionDefinition.BAD_REQUEST)
+            }
+        }
+
+        tourRepository.delete(tour)
+    }
+
+    @Transactional
+    fun modifyTour(tourRequest: TourRequest, memberId: Long) {
         val tour = tourRequest.id?.let { getTourById(it) } ?: throw CustomException(ExceptionDefinition.BAD_REQUEST)
 
         tour.apply {
@@ -70,14 +81,13 @@ class TourService(
 
     @Transactional
     fun saveTour(tourRequest: TourRequest, memberId: Long): Pair<Tour, List<String>?> {
-        val member = memberService.getById(memberId)
-
         when {
-            isTempSavedAndMemberId(tourRequest.isTempSaved, member) -> {
-                modifyTour(tourRequest, member)
+            isTempSavedAndMemberId(tourRequest.isTempSaved, memberId) -> {
+                modifyTour(tourRequest, memberId)
             }
         }
 
+        val member = memberService.getById(memberId)
         val tour = tourRepository.save(Tour.of(tourRequest, member))
 
         val themes = tourRequest.tourThemes
@@ -86,23 +96,43 @@ class TourService(
         return Pair(tour, themes)
     }
 
-    fun getFilteredTours(memberId: Long, pageable: Pageable, sortType: TourSortType): List<Tour> {
-        val getBlockedMemberIds = blockService.getMemberBlocks(memberId).map(BlockResponse::getBlocked)
-        if (getBlockedMemberIds.size > 1) {
-            when (sortType) {
-                TourSortType.LATEST -> tourQueryRepository.getFilteredLatestTours(getBlockedMemberIds, pageable)
-                TourSortType.SCRAPS -> tourQueryRepository.getFilteredPopularList(getBlockedMemberIds, pageable)
+    fun getTours(memberId: Long?, pageable: Pageable, sortType: TourSortType): List<Tour> {
+        val getBlockedMemberIds =
+            if (memberId != null) blockService.getMemberBlocks(memberId).map(BlockResponse::getBlocked) else listOf()
+        when (sortType) {
+            TourSortType.LATEST -> tourQueryRepository.getFilteredLatestTours(getBlockedMemberIds, pageable)
+            TourSortType.SCRAPS -> tourQueryRepository.getFilteredPopularList(getBlockedMemberIds, pageable)
+            TourSortType.MY_AGE -> {
+                val memberAge = if (memberId != null) {
+                    memberService.getById(memberId).getMemberAge()
+                } else throw CustomException(ExceptionDefinition.UNAUTHORIZED)
+                return tourQueryRepository.getAllToursSortedByMemberAge(memberAge, getBlockedMemberIds, pageable)
+            }
+            TourSortType.WEATHER, TourSortType.ENDS_AT, TourSortType.MY_GENDER -> {
+                if (memberId == null) throw CustomException(ExceptionDefinition.UNAUTHORIZED)
+                tourQueryRepository.getAllToursSortedBy(
+                    getBlockedMemberIds,
+                    pageable,
+                    sortType)
             }
         }
         return listOf()
     }
 
-    private fun getFilteredLatestTours(memberId: Long, pageable: Pageable): List<Tour> {
-        val getBlockedMemberIds = blockService.getMemberBlocks(memberId).map(BlockResponse::getBlocked)
+    fun getMemberTours(memberId: Long, pageable: Pageable): List<Tour> =
+        tourQueryRepository.getMemberTours(memberId, pageable)
 
-        if (getBlockedMemberIds.size > 1) {
-            return tourQueryRepository.getFilteredLatestTours(getBlockedMemberIds, pageable)
+    @Transactional
+    fun closeTour(memberId: Long, id: Long) {
+        val member = memberService.getById(memberId)
+        val tour = getTourById(id)
+
+        tour.member.id?.let {
+            if (it == memberId) {
+                tour.apply {
+                    this.close()
+                }
+            }
         }
-        return listOf()
     }
 }

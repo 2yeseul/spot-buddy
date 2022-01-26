@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class TourController(
     private val tourService: TourService
 ) {
-    // TODO : 테마 검색, 홈 검색, 임시 저장 조회,
+    // TODO : 테마 검색, 홈 검색
     @DeleteMapping("/temp")
     fun deleteTemporaryTour(memberId: Long): ResponseEntity<HttpStatus> {
         tourService.deleteAllTemporarySavedTours(memberId)
@@ -44,11 +44,35 @@ class TourController(
 
     @GetMapping("/")
     fun getTours(memberId: Long?, pageable: Pageable, sortType: TourSortType): ResponseEntity<List<TourView>> {
-        return if (memberId != null) {
-            val tours = tourService.getFilteredTours(memberId, pageable, sortType)
-                .map { TourView.of(it, null) }
+        val tours = tourService.getTours(memberId, pageable, sortType)
+        return ResponseEntity.ok(tours.map { TourView.of(it, null) })
+    }
 
-            ResponseEntity.ok(tours)
-        } else ResponseEntity.ok(listOf())
+    @GetMapping("/")
+    fun getMemberTours(memberId: Long, pageable: Pageable): ResponseEntity<List<TourView>> {
+        val tours = tourService.getMemberTours(memberId, pageable)
+
+        return ResponseEntity.ok(tours.map { TourView.of(it, null) })
+    }
+
+    @PatchMapping("/{id}")
+    fun modifyTour(memberId: Long, @PathVariable id: Long, @RequestBody tourRequest: TourRequest): ResponseEntity<HttpStatus> {
+        tourService.modifyTour(tourRequest, memberId)
+
+        return ResponseEntity.ok(HttpStatus.ACCEPTED)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteTour(memberId: Long, @PathVariable id: Long): ResponseEntity<HttpStatus> {
+        tourService.deleteById(memberId, id)
+
+        return ResponseEntity.ok(HttpStatus.ACCEPTED)
+    }
+
+    @PutMapping("/close/{id}")
+    fun closeTour(memberId: Long, @PathVariable id: Long): ResponseEntity<HttpStatus> {
+        tourService.closeTour(memberId, id)
+
+        return ResponseEntity.ok(HttpStatus.ACCEPTED)
     }
 }
