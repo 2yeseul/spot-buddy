@@ -13,29 +13,34 @@ import org.springframework.stereotype.Repository
 class TourQueryRepository(
     private val jpaQueryFactory: JPAQueryFactory,
 ) {
-    fun getFilteredLatestTours(getBlockedIds: List<Long>, pageable: Pageable): List<Tour> {
-        return jpaQueryFactory.selectFrom(tour)
+    fun getMemberTours(memberId: Long, pageable: Pageable): List<Tour> =
+        jpaQueryFactory.selectFrom(tour)
+            .where(tour.member.id.eq(memberId))
+            .orderBy(tour.id.desc())
+            .limit(pageable.pageSize.toLong())
+            .offset(pageable.offset)
+            .fetch()
+
+    fun getFilteredLatestTours(getBlockedIds: List<Long>?, pageable: Pageable): List<Tour> =
+        jpaQueryFactory.selectFrom(tour)
             .where(tour.member.id.notIn(getBlockedIds).and(tour.isTempSaved.isFalse).and(tour.isEnded.isFalse))
             .orderBy(tour.id.desc())
             .limit(pageable.pageSize.toLong())
             .offset(pageable.offset)
             .fetch()
-    }
 
-    fun getFilteredPopularList(getBlockedIds: List<Long>, pageable: Pageable): List<Tour> {
-        return jpaQueryFactory.selectFrom(tour)
+    fun getFilteredPopularList(getBlockedIds: List<Long>, pageable: Pageable): List<Tour> =
+        jpaQueryFactory.selectFrom(tour)
             .where(tour.member.id.notIn(getBlockedIds).and(tour.isTempSaved.isFalse).and(tour.isEnded.isFalse))
             .orderBy(tour.scrapCount.desc())
             .limit(pageable.pageSize.toLong())
             .offset(pageable.offset)
             .fetch()
-    }
-
 
     // 내 연령대 조회
     // tour.minAge <= 내 나이 <= tour.max
-    fun getAllToursSortedByMemberAge(memberAge: Int, getBlockedIds: List<Long>?, pageable: Pageable): List<Tour> {
-        return jpaQueryFactory.selectFrom(tour)
+    fun getAllToursSortedByMemberAge(memberAge: Int, getBlockedIds: List<Long>?, pageable: Pageable): List<Tour> =
+        jpaQueryFactory.selectFrom(tour)
             .where(tour.isEnded.not()
                 .and(tour.isTempSaved.not())
                 .and(tour.minimumAge.loe(memberAge))
@@ -46,11 +51,10 @@ class TourQueryRepository(
             .limit(pageable.pageSize.toLong())
             .offset(pageable.offset)
             .fetch()
-    }
 
     // 마감일 순, 성별, 날씨 정렬
-    fun getAllToursSortedBy(getBlockedIds: List<Long>?, pageable: Pageable, sortType: TourSortType): List<Tour> {
-        return jpaQueryFactory.selectFrom(tour)
+    fun getAllToursSortedBy(getBlockedIds: List<Long>?, pageable: Pageable, sortType: TourSortType): List<Tour> =
+        jpaQueryFactory.selectFrom(tour)
             .where(tour.isEnded.isFalse
                 .and(tour.isTempSaved.isFalse)
                 .and(tour.member.id.notIn(getBlockedIds))
@@ -59,6 +63,5 @@ class TourQueryRepository(
             .limit(pageable.pageSize.toLong())
             .offset(pageable.offset)
             .fetch()
-    }
 
 }
