@@ -1,5 +1,6 @@
 package kr.co.spotbuddy.domain
 
+import kr.co.spotbuddy.interfaces.request.AlarmRequest
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -14,6 +15,8 @@ data class Alarm(
     @Enumerated(value = EnumType.STRING)
     val alarmType: AlarmType,
 
+    val derivedId: Long, // alarm 송신한 객체
+
     var isRead: Boolean,
 
     val title: String,
@@ -23,10 +26,24 @@ data class Alarm(
     val createdAt: LocalDateTime,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val member: Member
+    val member: Member,
 ) {
     fun changeStatusToRead() {
         this.isRead = true
+    }
+
+    companion object {
+        fun from(alarmRequest: AlarmRequest, member: Member): Alarm {
+            return Alarm(id = null,
+                alarmType = alarmRequest.alarmType,
+                derivedId = alarmRequest.derivedId,
+                title = alarmRequest.title,
+                body = alarmRequest.body,
+                createdAt = LocalDateTime.now(),
+                isRead = false,
+                member = member,
+            )
+        }
     }
 }
 
