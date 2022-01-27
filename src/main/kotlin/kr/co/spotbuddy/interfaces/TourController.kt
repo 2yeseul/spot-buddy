@@ -42,7 +42,7 @@ class TourController(
             .body(TourView.of(tour, null))
     }
 
-    @GetMapping("/")
+    @GetMapping("/all")
     fun getTours(memberId: Long?, pageable: Pageable, sortType: TourSortType): ResponseEntity<List<TourView>> {
         val tours = tourService.getTours(memberId, pageable, sortType)
         return ResponseEntity.ok(tours.map { TourView.of(it, null) })
