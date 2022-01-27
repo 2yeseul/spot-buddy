@@ -28,10 +28,11 @@ class BlockService(
     }
 
     @Transactional
-    fun block(blockExecutor: Long, getBlocked: Long) {
+    fun doBlock(blockExecutor: Long, getBlocked: Long) {
         if (getBlocked isAlreadyBlockedBy blockExecutor) {
             return
         }
+
         blockRepository.save(Block.of(blockExecutor, getBlocked))
     }
 
