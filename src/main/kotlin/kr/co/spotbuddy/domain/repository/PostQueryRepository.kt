@@ -10,11 +10,12 @@ import org.springframework.stereotype.Repository
 class PostQueryRepository(
     private val jpaQueryFactory: JPAQueryFactory,
 ) {
+    // batch..
     fun resetTodayView() {
         jpaQueryFactory.update(post).set(post.todayViewCount, 0)
     }
 
-    fun findAllByMember(memberId: Long): List<Post> {
+    fun findAllByMemberId(memberId: Long): List<Post> {
         return jpaQueryFactory.selectFrom(post)
             .where(post.member.id.eq(memberId))
             .fetch()
