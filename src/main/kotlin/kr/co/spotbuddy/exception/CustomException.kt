@@ -20,4 +20,5 @@ enum class ExceptionDefinition(
     NOT_FOUND_TOUR("존재하지 않는 동행입니다.", HttpStatus.NOT_FOUND),
     BAD_REQUEST("잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED("로그인이 필요합니다.", HttpStatus.UNAUTHORIZED),
+    ALREADY_EXISTS_COMMENT_REACTION("이미 존재하는 댓글 리액션 입니다.", HttpStatus.NOT_ACCEPTABLE),
 }

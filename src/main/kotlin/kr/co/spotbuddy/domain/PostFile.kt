@@ -14,4 +14,10 @@ data class PostFile(
     val post: Post,
 
     val url: String,
-)
+) {
+    companion object {
+        fun of(post: Post, url: String): PostFile {
+            return PostFile(null, post, url)
+        }
+    }
+}

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @Slf4j
-@RequestMapping("/member")
+@RequestMapping("/members")
 class MemberController(
     private val memberService: MemberService
 ) {
@@ -36,4 +36,6 @@ class MemberController(
             .ok()
             .body(result)
     }
+
+    // TODO: Member 단건 조회
 }

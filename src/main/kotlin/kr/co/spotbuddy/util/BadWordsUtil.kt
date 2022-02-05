@@ -1,15 +1,11 @@
 package kr.co.spotbuddy.util
 
 object BadWordsUtil {
-    fun isBadWordsContains(nickname: String): Boolean {
-        for (word in BAD_WORDS) {
-            if (nickname.contains(word)) {
-                return true
-            }
-        }
-        return false
+    fun isBadWordsContains(words: String): Boolean {
+        return BAD_WORDS.any { it.contains(words) }
     }
-    val BAD_WORDS = arrayOf(
+
+    private val BAD_WORDS = arrayOf(
         "10새",
         "10새기",
         "10새리",

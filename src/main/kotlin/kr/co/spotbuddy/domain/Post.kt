@@ -1,5 +1,6 @@
 package kr.co.spotbuddy.domain
 
+import kr.co.spotbuddy.interfaces.request.PostRequest
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -30,4 +31,21 @@ data class Post(
 
     val deletedAt: LocalDateTime?
 ) {
+    companion object {
+        fun of(member: Member, postRequest: PostRequest): Post {
+            return Post(
+                id = null,
+                member = member,
+                category = postRequest.category,
+                teamIndex = postRequest.teamIndex,
+                title = postRequest.title,
+                content = postRequest.content,
+                isAnonymous = postRequest.isAnonymous,
+                createdAt = LocalDateTime.now(),
+                viewCount = 0,
+                todayViewCount = 0,
+                deletedAt = null
+            )
+        }
+    }
 }
