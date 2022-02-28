@@ -31,7 +31,8 @@ class Member(
     var isAgreeOnGetPromotion: Boolean,
     val gender: Int,
     var weather: Int = 50,
-    var isDeleted: Boolean?
+    var isDeleted: Boolean?,
+    val token: String?
 ) {
     fun removeMember() {
         this.isDeleted = true
@@ -76,6 +77,7 @@ class Member(
                 isAgreeOnTOS = true,
                 isDeleted = false,
                 isEmailVerified = false,
+                token = null
             )
         }
     }

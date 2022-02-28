@@ -45,11 +45,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     runtimeOnly("mysql:mysql-connector-java")
     annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:sprin g-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
 
     implementation("org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE")
     compileOnly("com.amazonaws:aws-java-sdk-s3:1.12.146")
+
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
+    implementation("io.ktor:ktor-client-cio-jvm:1.6.7")
+
 }
 
 tasks.withType<KotlinCompile> {
